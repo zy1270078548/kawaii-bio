@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>张炀 的 Kawaii Bio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Gaegu:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: 79 68 70;
+      --paper: 255 249 228;
+      --candy: 255 209 220;
+      --sky: 188 231 238;
+      --lemon: 255 246 170;
+      --mint: 190 246 211;
+      --lilac: 245 209 251;
+      --peach: 255 205 177;
+      --night: 54 49 66;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: rgb(var(--ink));
+      font-family: Gaegu, cursive;
+      background:
+        radial-gradient(circle at 15% 12%, rgb(var(--sky) / .42), transparent 26rem),
+        radial-gradient(circle at 90% 24%, rgb(var(--candy) / .32), transparent 22rem),
+        rgb(var(--paper));
+    }
+    body.dark {
+      --ink: 255 246 255;
+      --paper: 21 18 34;
+      --candy: 255 129 190;
+      --sky: 94 225 255;
+      --lemon: 255 229 100;
+      --mint: 124 255 196;
+      --lilac: 213 157 255;
+      --peach: 255 171 132;
+      --night: 8 7 16;
+      background:
+        radial-gradient(circle at 15% 12%, rgb(var(--sky) / .24), transparent 24rem),
+        radial-gradient(circle at 90% 24%, rgb(var(--candy) / .22), transparent 22rem),
+        rgb(var(--night));
+    }
+    .texture::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .24;
+      background-image: radial-gradient(rgb(var(--ink) / .14) .8px, transparent .8px);
+      background-size: 11px 11px;
+    }
+    .wrap { position: relative; max-width: 1120px; margin: 0 auto; padding: 32px 16px 72px; }
+    .nav {
+      position: sticky; top: 0; z-index: 5;
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      padding: 14px 18px; border: 2px solid rgb(var(--ink)); border-radius: 0 0 18px 18px;
+      background: rgb(var(--sky)); box-shadow: 0 5px 0 rgb(var(--ink) / .9);
+    }
+    .brand { font-family: "Darumadrop One", cursive; font-size: 34px; line-height: 1; }
+    .pixel { font-family: "Space Mono", monospace; text-transform: uppercase; font-size: 12px; }
+    .hero, .card, .side {
+      border: 2px solid rgb(var(--ink)); border-radius: 24px; background: rgb(var(--paper) / .95);
+      box-shadow: 5px 6px 0 rgb(var(--ink) / .88);
+    }
+    .hero { padding: 28px; margin: 28px 0; overflow: hidden; }
+    .hero h1 {
+      margin: 0;
+      font-family: "Darumadrop One", cursive;
+      font-size: clamp(56px, 12vw, 120px);
+      line-height: .85;
+      text-shadow: 2px 2px 0 rgb(var(--sky)), 4px 4px 0 rgb(var(--candy));
+    }
+    .hero p { max-width: 760px; font-size: 28px; line-height: 1.15; }
+    .grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; }
+    .stack { display: grid; gap: 20px; }
+    .card { padding: 22px; transform: rotate(var(--tilt, 0deg)); }
+    .card h2 { margin: 0 0 14px; font-family: "Darumadrop One", cursive; font-size: 38px; }
+    .stats { display: grid; gap: 12px; }
+    .bar { height: 22px; border: 2px solid rgb(var(--ink)); border-radius: 999px; padding: 3px; background: rgb(var(--paper)); }
+    .bar span { display: block; height: 100%; border-radius: 999px; border: 1px solid rgb(var(--ink)); background: rgb(var(--candy)); }
+    .skills, .tags, .badges { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pill { border: 2px solid rgb(var(--ink)); border-radius: 16px; padding: 8px 12px; background: rgb(var(--lilac)); box-shadow: 3px 4px 0 rgb(var(--ink) / .88); font-size: 22px; }
+    .project, .time { border: 2px solid rgb(var(--ink)); border-radius: 16px; padding: 14px; background: rgb(var(--paper)); box-shadow: 3px 4px 0 rgb(var(--ink) / .88); }
+    .project h3, .time h3 { margin: 0; font-family: "Darumadrop One", cursive; font-size: 28px; }
+    .doodle { position: fixed; pointer-events: none; font-family: "Darumadrop One"; font-size: 44px; opacity: .6; animation: float 5s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-14px) rotate(5deg); } }
+    @media (max-width: 840px) {
+      .grid { grid-template-columns: 1fr; }
+      .nav { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body class="texture">
+  <div id="app"></div>
+  <script>
+    const profile = {"identity":{"name":"张炀","title":"全栈向前端开发者 · 小程序与 Electron 实验室主理人","avatarMood":"sparkling-with-curiosity","location":"北京 · 可远程","summary":"27岁前端开发者，专注Vue2/3、小程序、Electron与WebRTC实践。热爱用代码搭建有温度的数字体验，从海淀健步走到局域网远程控制，持续交付轻盈又扎实的解决方案。"},"attributes":{"coding":92,"creativity":85,"communication":80,"sparkle":88},"skills":[{"name":"Vue.js","level":95,"type":"frontend"},{"name":"微信小程序","level":93,"type":"frontend"},{"name":"TypeScript","level":87,"type":"frontend"},{"name":"Electron","level":82,"type":"desktop"},{"name":"WebRTC","level":78,"type":"agent"},{"name":"uni-app","level":86,"type":"frontend"},{"name":"Git & 工程协作","level":90,"type":"other"},{"name":"UI/UX 还原力","level":84,"type":"design"}],"projects":[{"name":"局域网远程控制与音频映射系统","role":"独立开发者","description":"基于 Vue3 + Electron + WebRTC 的 P2P 音频路由与毫秒级远控工具，实现零服务器低延迟局域网协作。","tags":["Electron","WebRTC","音视频"]},{"name":"趣游红色海淀","role":"前端开发","description":"海淀区红色教育基地数字化平台，支持流式AI对话、Markdown解析、语音交互与个性化贴图地图。","tags":["小程序","AI","语音"]},{"name":"海淀创森健步走","role":"前端开发","description":"沉浸式健步走小程序，通过后台定位+polyline动态绘制行走路线，打造‘地图闯关’与‘亿步点亮’双玩法。","tags":["小程序","地图","LBS"]},{"name":"华北利星行H5商城","role":"前端开发","description":"Uni-app跨端工业品电商系统，集成神策埋点、多支付通道与拼团代金券，驱动B2B采购链路数字化。","tags":["uni-app","H5","数据驱动"]},{"name":"当阳建投后台管理系统","role":"前端开发","description":"Vue2+iView企业级后台，支持按钮级权限、OnlyOffice在线编辑、甘特图与多文件压缩下载。","tags":["Vue2","权限系统","企业后台"]}],"timeline":[{"year":"2022.04 – 至今","title":"小程序（北京）科技有限公司","text":"主力前端开发，深耕 Vue3、小程序生态与性能优化，参与多个政企级项目交付。"},{"year":"2021.03 – 2022.02","title":"青动时代科技有限公司","text":"夯实前端基建能力，熟练掌握 HTML5/CSS3/JS/TS，快速上手 React/Vue 全家桶与工程化协作。"},{"year":"2020 – 2021","title":"自由探索期","text":"密集实践 Electron、WebRTC、uni-app 与小程序云开发，积累全链路技术敏感度与自驱项目经验。"},{"year":"2019 – 2020","title":"职业起点","text":"统招大专毕业，从基础 HTML/CSS/JS 入门，完成首个企业级 H5 与小程序项目落地。"},{"year":"2018","title":"初识前端","text":"自学 HTML/CSS/JavaScript，完成个人作品集与小型响应式网站，确立职业方向。"}],"tags":["爱折腾","细节控","文档阅读者","开源爱好者","轻量化信仰者"],"badges":["5年+前端实战","30+上线项目","WebRTC局域网实践者","小程序审核通关达人"],"personality":"理性与热忱并存的技术手艺人：逻辑清晰、沟通温和、交付靠谱；喜欢拆解复杂问题，也享受用一行优雅代码点亮小确幸。对用户体验有本能敬畏，相信技术该服务于人，而非让人适应技术。","stickers":["sparkles","heart","cloud","star","cursor","bow"],"theme":"melonSoda","layout":["hero","attributes","skills","projects","timeline","tags","personality"]};
+    const theme = "melonSoda";
+    const darkMode = false;
+    const palettes = {
+      sugarPop: { ink: '79 68 70', paper: '255 249 228', candy: '255 209 220', sky: '188 231 238', lemon: '255 246 170', mint: '190 246 211', lilac: '245 209 251', peach: '255 205 177', night: '54 49 66' },
+      pixelDream: { ink: '65 54 82', paper: '253 244 255', candy: '255 177 216', sky: '142 230 255', lemon: '255 244 147', mint: '158 255 213', lilac: '210 188 255', peach: '255 196 160', night: '32 27 52' },
+      melonSoda: { ink: '58 74 64', paper: '252 255 235', candy: '255 197 214', sky: '182 236 224', lemon: '250 245 157', mint: '173 244 181', lilac: '223 205 255', peach: '255 215 183', night: '39 54 53' }
+    };
+    const palette = palettes[theme] || palettes.sugarPop;
+    Object.entries(palette).forEach(([key, value]) => document.documentElement.style.setProperty('--' + key, value));
+    if (darkMode) document.body.classList.add('dark');
+    const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+    const list = (items, mapper) => (items || []).map(mapper).join('');
+    document.getElementById('app').innerHTML = `
+      <span class="doodle" style="left:7%;top:17%">+</span>
+      <span class="doodle" style="right:8%;top:22%;animation-delay:.7s">&lt;3</span>
+      <span class="doodle" style="left:10%;bottom:16%;animation-delay:1.3s">*</span>
+      <nav class="nav">
+        <div>
+          <div class="brand">Kawaii Bio</div>
+          <div class="pixel">published scrapbook page</div>
+        </div>
+        <div class="pixel">${esc(profile.identity.location)}</div>
+      </nav>
+      <main class="wrap">
+        <section class="hero">
+          <div class="pixel">${esc(profile.identity.avatarMood)}</div>
+          <h1>${esc(profile.identity.name)}</h1>
+          <p>${esc(profile.identity.title)}</p>
+          <p>${esc(profile.identity.summary)}</p>
+        </section>
+        <div class="grid">
+          <div class="stack">
+            <section class="card" style="--tilt:-.8deg">
+              <h2>Skill Constellation</h2>
+              <div class="skills">${list(profile.skills, (skill) => `<span class="pill">${esc(skill.name)} · lvl.${esc(skill.level)}</span>`)}</div>
+            </section>
+            <section class="card" style="--tilt:.6deg">
+              <h2>Projects</h2>
+              <div class="stack">${list(profile.projects, (project) => `<article class="project"><h3>${esc(project.name)}</h3><div class="pixel">${esc(project.role)}</div><p>${esc(project.description)}</p><div class="tags">${list(project.tags, (tag) => `<span class="pill"># ${esc(tag)}</span>`)}</div></article>`)}</div>
+            </section>
+            <section class="card" style="--tilt:-.4deg">
+              <h2>Timeline</h2>
+              <div class="stack">${list(profile.timeline, (item) => `<article class="time"><div class="pixel">${esc(item.year)}</div><h3>${esc(item.title)}</h3><p>${esc(item.text)}</p></article>`)}</div>
+            </section>
+          </div>
+          <aside class="stack">
+            <section class="card" style="--tilt:1deg">
+              <h2>Stats</h2>
+              <div class="stats">${list(Object.entries(profile.attributes || {}), ([key, value]) => `<div><div class="pixel">${esc(key)} · ${esc(value)}</div><div class="bar"><span style="width:${Number(value) || 0}%"></span></div></div>`)}</div>
+            </section>
+            <section class="card" style="--tilt:-1deg">
+              <h2>Tags</h2>
+              <div class="tags">${list(profile.tags, (tag) => `<span class="pill"># ${esc(tag)}</span>`)}</div>
+            </section>
+            <section class="card" style="--tilt:.8deg">
+              <h2>Persona</h2>
+              <p style="font-size:24px;line-height:1.2">${esc(profile.personality)}</p>
+              <div class="badges">${list(profile.badges, (badge) => `<span class="pill">* ${esc(badge)}</span>`)}</div>
+            </section>
+          </aside>
+        </div>
+      </main>
+    `;
+  </script>
+</body>
+</html>
