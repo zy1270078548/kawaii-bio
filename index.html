@@ -321,9 +321,11 @@
         </div>
       </main>
     `;
+    console.log('avatar1', avatarUrl);
     if (avatarUrl) {
       const avatar = document.querySelector('[data-avatar]');
       const image = document.querySelector('.avatar-img');
+      console.log('avatar2', avatar);
       if (avatar && image) {
         image.src = avatarUrl;
         image.onload = () => avatar.classList.add('has-image');
